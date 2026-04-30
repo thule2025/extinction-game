@@ -1,6 +1,6 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class WelcomeScreen extends JFrame {
 
@@ -51,8 +51,8 @@ public class WelcomeScreen extends JFrame {
         cards.setOpaque(false);
         cards.setMaximumSize(new Dimension(560, 110));
         cards.add(makeInfoCard("The catch",
-                "Every survival action drives a species extinct. When a\n" +
-                "species dies, its predators slowly starve — 3 nights later."));
+                "Predators starve 1 night after ALL their prey go extinct.\n" +
+                "Prey overpopulate and die 3 nights after ALL their predators are gone."));
         cards.add(makeInfoCard("The end",
                 "When all consumers are gone the food web collapses.\n" +
                 "Death is inevitable — delay it as long as you can."));
@@ -92,8 +92,8 @@ public class WelcomeScreen extends JFrame {
         p.add(scoring);
 
         p.add(Box.createVerticalStrut(10));
-        JLabel chain = new JLabel("  Species extinct  →  3 nights later  →  predators starve");
-        chain.setFont(new Font("Arial", Font.PLAIN, 13));
+        JLabel chain = new JLabel("  All prey extinct -> 1 night -> Predator dies | All predators extinct -> 3 nights -> Prey dies");
+        chain.setFont(new Font("Arial", Font.PLAIN, 12));
         chain.setForeground(Color.GRAY);
         chain.setAlignmentX(Component.CENTER_ALIGNMENT);
         p.add(chain);
@@ -123,12 +123,10 @@ public class WelcomeScreen extends JFrame {
         grid.add(makeTierCard("Secondary consumers", "Raccoon · Pelican · Sea Star · Sea Turtle", new Color(230, 241, 251)));
         grid.add(makeTierCard("Primary consumers", "Clam · Armadillo · Blue Crab · Fiddler Crab", new Color(230, 241, 251)));
 
-        // Producers span both columns via a wrapper
         JPanel producerWrapper = new JPanel(new GridLayout(1, 1));
         producerWrapper.setOpaque(false);
         producerWrapper.add(makeTierCard("Producers (unkillable base)", "Mangroves · Sea Oats · Wildflowers", new Color(234, 243, 222)));
         
-        // Fake second cell so the grid stays even
         JPanel empty = new JPanel();
         empty.setOpaque(false);
 
@@ -171,7 +169,6 @@ public class WelcomeScreen extends JFrame {
         currentPage = Math.max(0, Math.min(TOTAL_PAGES - 1, currentPage + dir));
 
         if (currentPage == TOTAL_PAGES - 1 && dir == 1) {
-            // On the last page's forward press, transition to game
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Ready to begin your fight for survival?",
                     "Start Game", JOptionPane.YES_NO_OPTION);

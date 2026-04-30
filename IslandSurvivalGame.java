@@ -1,6 +1,5 @@
-import javax.swing.*;
-import java.awt.*;
 import java.util.List;
+import javax.swing.*;
 
 public class IslandSurvivalGame extends JFrame {
 
@@ -8,10 +7,9 @@ public class IslandSurvivalGame extends JFrame {
     private int score;
     private int nightCount;
 
-    // Placeholder image icons (Replace the filepaths with your actual image files)
+    // Placeholder image icons
     private ImageIcon popupIcon = new ImageIcon("popup_placeholder.png");
 
-    // Empty constructor — WelcomeScreen handles the entry UI now
     public IslandSurvivalGame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -41,8 +39,8 @@ public class IslandSurvivalGame extends JFrame {
                 List<String> diedTonight = ecosystem.processNightExtinctions();
                 if (!diedTonight.isEmpty()) {
                     String message = "NIGHT " + nightCount + " Update\n\n" +
-                            "Due to the collapsing food web, the following species starved and died out overnight:\n" +
-                            String.join("\n", diedTonight);
+                            "Due to the collapsing food web, the following species died out overnight:\n\n" +
+                            String.join("\n\n", diedTonight);
 
                     JOptionPane.showMessageDialog(null, message, "Ecological Cascade",
                             JOptionPane.WARNING_MESSAGE, popupIcon);
@@ -65,32 +63,33 @@ public class IslandSurvivalGame extends JFrame {
 
             // 3. Player Location Choice & Extinction Mapping
             String targetSpecies = "";
+            String actionReason = "";
             String[] locations;
 
             if (actionChoice == 0) { // Build Traps
                 locations = new String[]{"Coral Reef", "Mangrove Roots", "Jungle Path"};
                 int locChoice = showLocationDialog("Where will you place your traps?", locations);
-                if (locChoice == 0) targetSpecies = "Sea Stars";
-                else if (locChoice == 1) targetSpecies = "Blue Crabs";
-                else if (locChoice == 2) targetSpecies = "Wild Boar";
+                if (locChoice == 0) { targetSpecies = "Sea Stars"; actionReason = "accidentally crushed by heavy trap anchors on the fragile reef."; }
+                else if (locChoice == 1) { targetSpecies = "Blue Crabs"; actionReason = "over-trapped within the mangrove roots until none remained."; }
+                else if (locChoice == 2) { targetSpecies = "Wild Boar"; actionReason = "snared aggressively along the jungle paths to extinction."; }
 
             } else if (actionChoice == 1) { // Go Fishing
                 locations = new String[]{"Lagoon", "Deep Water", "Estuary"};
                 int locChoice = showLocationDialog("Where will you fish?", locations);
-                if (locChoice == 0) targetSpecies = "Fiddler Crabs";
-                else if (locChoice == 1) targetSpecies = "Sea Turtles";
-                else if (locChoice == 2) targetSpecies = "Raccoons";
+                if (locChoice == 0) { targetSpecies = "Fiddler Crabs"; actionReason = "wiped out as dragging lagoon nets utterly destroyed their habitat."; }
+                else if (locChoice == 1) { targetSpecies = "Sea Turtles"; actionReason = "tangled and tragically drowned in heavy deep water nets."; }
+                else if (locChoice == 2) { targetSpecies = "Raccoons"; actionReason = "caught and drowned in estuary nets while they were foraging."; }
 
             } else { // Scavenge & Build Fire
                 locations = new String[]{"Forest Edge", "Beach Sand", "Cliffs"};
                 int locChoice = showLocationDialog("Where will you scavenge?", locations);
-                if (locChoice == 0) targetSpecies = "Armadillos";
-                else if (locChoice == 1) targetSpecies = "Clams";
-                else if (locChoice == 2) targetSpecies = "Pelicans";
+                if (locChoice == 0) { targetSpecies = "Armadillos"; actionReason = "hunted to total extinction at the forest edge by your group."; }
+                else if (locChoice == 1) { targetSpecies = "Clams"; actionReason = "completely overharvested and dug out from the beach sand."; }
+                else if (locChoice == 2) { targetSpecies = "Pelicans"; actionReason = "driven away forever as you destroyed their nests on the cliffs."; }
             }
 
             // 4. Resolve Direct Extinction
-            String resultMsg = ecosystem.triggerDirectExtinction(targetSpecies);
+            String resultMsg = ecosystem.triggerDirectExtinction(targetSpecies, actionReason);
             boolean alreadyExtinct = resultMsg.contains("already extinct");
 
             if (alreadyExtinct) {
